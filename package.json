@@ -2,9 +2,9 @@
   "name": "dapper",
   "version": "1.0.0",
   "description": "NodeJS app in TypeScript",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/Eddwiin/Dapper/issues"
   },
-  "homepage": "https://github.com/Eddwiin/Dapper#readme"
+  "homepage": "https://github.com/Eddwiin/Dapper#readme",
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
 }
