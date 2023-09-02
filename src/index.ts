@@ -1,14 +1,11 @@
-import http from 'http';
+import bodyParser from 'body-parser';
+import Express from 'express';
+import authRouter from './routes/auth';
 
-const hostname = process.env.HOSTNAME ||'127.0.0.1';
-const port = Number(process.env.PORT) || 3000;
+const app = Express();
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World');
-});
+app.use(bodyParser.urlencoded({ extended: false}));
 
-server.listen(port, hostname, () => {
-    console.log("Server running")
-})
+app.use('/auth', authRouter)
+
+app.listen(3000)
