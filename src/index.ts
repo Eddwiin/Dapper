@@ -2,7 +2,10 @@ import bodyParser from 'body-parser';
 import Express, { json } from 'express';
 import authRouter from './routes/auth.route';
 import bookRouter from './routes/book.route';
+import { mongooseConnect } from './utils/database/mongo-db.util';
 import { ROUTE_PATH } from './utils/route-path.config';
+
+mongooseConnect();
 
 const app = Express();
 

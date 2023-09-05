@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { Model } from "sequelize";
-import { IBook } from "../interfaces/book.interface";
 import { BookService } from "../services/book.service";
 
 export default class BookController {
@@ -8,7 +6,7 @@ export default class BookController {
 
     getAll(req: Request, res: Response) {
         return this.bookService.getAll()
-            .then((books: Model<IBook>[]) => res.status(200).send(books))
+            .then((books) => res.status(200).send(books))
     }
 
     getBookById(req: Request, res: Response) {
@@ -19,7 +17,8 @@ export default class BookController {
 
     update(req: Request, res: Response) {
         return this.bookService.update(req.body)
-            .then((result) => res.status(200).send(result))
+            .then((result: any) => res.status(200).send(result))
+            .catch(err => console.error(err))
     }
 
     save(req: Request, res: Response) {
@@ -32,7 +31,7 @@ export default class BookController {
         const { id } = req.params;
 
         return this.bookService.delete(id)
-                .then((book) => res.status(200)) 
+                .then((result) => res.status(200).send(result)) 
                 .catch(err => console.log("ERREUR", err))
     }
 }

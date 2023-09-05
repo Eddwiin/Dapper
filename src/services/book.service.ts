@@ -1,13 +1,12 @@
 import { IBook } from "../interfaces/book.interface";
-import { MysqlBookRepository } from "../repositories/mysql-book.repository";
+import { BookRepository } from "../repositories/book.repository";
 
 export class BookService {
-    repository = new MysqlBookRepository();
+    // repository = new MysqlBookRepository();
+    repository = new BookRepository();
 
     getAll() {
-        return this.repository.getAll().then(books => {
-            return books;
-        })
+        return this.repository.getAll();
     }
 
     getById(id: string) {

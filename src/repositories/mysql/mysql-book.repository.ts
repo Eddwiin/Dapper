@@ -1,6 +1,6 @@
-import { IBook } from "../interfaces/book.interface";
-import { IRepository } from "../interfaces/repository.interface";
-import BookModel from "../models/mysql/book.model";
+import { IBook } from "../../interfaces/book.interface";
+import { IRepository } from "../../interfaces/repository.interface";
+import BookModel from "../../models/mysql/book.model";
 
 export class MysqlBookRepository implements IRepository<IBook> {
     getAll() {
