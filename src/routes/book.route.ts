@@ -1,6 +1,6 @@
 import { Router } from "express";
 import BookController from "../controllers/book.controller";
-import { ROUTE_PATH } from "../utils/route-path.config";
+import { ROUTE_PATH } from "../utils/route-path.util";
 
 const bookRouter = Router();
 const bookController = new BookController();

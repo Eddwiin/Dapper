@@ -1,27 +1,46 @@
 import { IBook } from "../interfaces/book.interface";
-import { BookRepository } from "../repositories/book.repository";
-
+import { BookModel } from "../models/book.model";
 export class BookService {
-    // repository = new MysqlBookRepository();
-    repository = new BookRepository();
 
     getAll() {
-        return this.repository.getAll();
+        return BookModel.find();
     }
 
     getById(id: string) {
-        return this.repository.getById(id);
+        return BookModel.findById(id);
     }
 
     update(book: IBook) {
-        return this.repository.update(book)
+        const options = { returnNewDocument: true };
+                
+        return BookModel.updateOne(
+            { _id: book._id},
+            {
+                $set: {
+                    title: book.title,
+                    price: book.price,
+                    description: book.description,
+                    author: book.author    
+                }
+            },
+            options
+        )
     }
 
     save(book: Omit<IBook, 'id'>) {
-        return this.repository.save(book);
+        const newBook = new BookModel({
+            title: book.title,
+            price: book.price,
+            description: book.description,
+            author: book.author
+        });
+        
+        return newBook.save();;
     }
 
     delete(id: string) {
-        return this.repository.delete(id);
+        return BookModel.deleteOne(
+            { _id: id}
+        )
     }
 }
