@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import csurf from 'csurf';
 import Express, { json } from 'express';
 import authRouter from './routes/auth.route';
 import bookRouter from './routes/book.route';
@@ -11,9 +12,11 @@ mongooseConnect();
 const SERVER_PORT = ENV_CONFIG.SERVER_PORT;
 
 const app = Express();
+const csrfProctection = csurf();
 
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(json())
+// app.use(csrfProctection)
 
 app.use(ROUTE_PATH.AUTH.DEFAULT, authRouter)
 app.use(ROUTE_PATH.BOOK.DEFAULT, bookRouter)
