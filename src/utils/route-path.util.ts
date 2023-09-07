@@ -1,6 +1,8 @@
 export const ROUTE_PATH = {
     AUTH: {
-        DEFAULT: '/auth'
+        DEFAULT: '/auth',
+        SIGNUP: '/sign-up',
+        SIGNIN: '/sign-in'
     },
     BOOK: {
         DEFAULT: '/book',
