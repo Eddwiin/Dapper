@@ -20,7 +20,7 @@ export default class BookController {
     update(req: Request, res: Response) {
         const errors = validationResult(req);
         
-        if (errors) return returnErrorsStatus(res, errors);
+        if (!errors.isEmpty()) return returnErrorsStatus(res, errors);
 
         return this.bookService.update(req.body)
             .then((result: any) => res.status(200).send(result))
@@ -30,7 +30,7 @@ export default class BookController {
     save(req: Request, res: Response) {
         const errors = validationResult(req);
 
-        if (errors) return returnErrorsStatus(res, errors)
+        if (!errors.isEmpty()) return returnErrorsStatus(res, errors)
         
         return this.bookService.save(req.body)
             .then((result) => res.status(200).send(result))
