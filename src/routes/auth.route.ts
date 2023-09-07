@@ -23,6 +23,7 @@ authRouter.post(
     [
         emailValidator,
         passwordValidator
-    ]
+    ],
+    (req: Request, res: Response) => authController.postSignIn(req, res)
 )
 export default authRouter;

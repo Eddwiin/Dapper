@@ -16,7 +16,6 @@ const emailValidator = body('email').isEmail().withMessage('Email invalid').norm
 const emailExistValidator = body('email')
     .custom(async (email: string) => {
         const userFound: IUser = await new UserModel({ email }).findUserByEmail();
-
         return (userFound) ?  Promise.reject('E-mail already in use') : null;
     })
 

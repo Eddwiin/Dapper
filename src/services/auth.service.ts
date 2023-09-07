@@ -1,6 +1,8 @@
 import { IUser } from "../interfaces/user.interface";
 import { UserModel } from "../models/user.model";
 
+type UserLogin = Pick<IUser, 'email' | 'password'>;
+
 export class AuthService {
     saveUser(user: Omit<IUser, '_id'>){
         const newUser = new UserModel({
@@ -12,4 +14,9 @@ export class AuthService {
 
         return newUser.save();
     }
+
+    getUserByEmail(email: string) {
+        return new UserModel({ email }).findUserByEmail();
+    }
+
 }
