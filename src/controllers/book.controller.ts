@@ -3,6 +3,8 @@ import { validationResult } from "express-validator";
 import { BookService } from "../services/book.service";
 import { returnErrorsStatus } from "../utils/errors-response.util";
 
+type RequestParams = { id: string };
+
 export default class BookController {
     private bookService = new BookService();
 
@@ -12,7 +14,7 @@ export default class BookController {
     }
 
     getBookById(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id } = req.params as RequestParams;
 
         return this.bookService.getById(id).then((book) => res.status(200).send(book)) 
     }
@@ -37,7 +39,7 @@ export default class BookController {
     }
 
     delete(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id } = req.params as RequestParams;
 
         return this.bookService.delete(id)
                 .then((result) => res.status(200).send(result)) 

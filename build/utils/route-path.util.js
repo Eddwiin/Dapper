@@ -1,9 +1,11 @@
-export const ROUTE_PATH = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ROUTE_PATH = void 0;
+exports.ROUTE_PATH = {
     AUTH: {
         DEFAULT: '/auth',
         SIGNUP: '/sign-up',
-        SIGNIN: '/sign-in',
-        LOGOUT: '/logout'
+        SIGNIN: '/sign-in'
     },
     BOOK: {
         DEFAULT: '/book',
@@ -13,4 +15,4 @@ export const ROUTE_PATH = {
         UPDATE: '/update',
         DELETE: '/delete/:id'
     }
-} as const;
+};

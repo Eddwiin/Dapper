@@ -1,3 +1,4 @@
+// import { default as connectMongoDBSession } from 'connect-mongodb-session';
 import mongoose from "mongoose";
 import ENV_CONFIG from "./env.util";
 
@@ -8,3 +9,8 @@ export const mongooseConnect = () => {
             .then(() => console.log("MongoDB connected"))
             .catch(err => console.error("ERROR MONGODB: " + err ))
 }
+
+// export const mongoDBStore = new connectMongoDBSession({
+//     uri: MONGO_URI,
+//     collection: 'sessions'
+// });
