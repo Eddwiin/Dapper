@@ -27,6 +27,6 @@ authRouter.post(
     (req: Request, res: Response) => authController.postSignIn(req, res)
 );
 
-authRouter.get(ROUTE_PATH.AUTH.LOGOUT, (req: Request, res: Response) => authController.getLogout(req, res))
+authRouter.post(ROUTE_PATH.AUTH.LOGOUT, (req: Request, res: Response) => authController.postLogout(req, res))
 
 export default authRouter;

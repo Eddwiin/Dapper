@@ -31,7 +31,7 @@ export default class BookController {
 
     save(req: Request, res: Response) {
         const errors = validationResult(req);
-
+        
         if (!errors.isEmpty()) return returnErrorsStatus(res, errors)
         
         return this.bookService.save(req.body)

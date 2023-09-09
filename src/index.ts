@@ -3,6 +3,8 @@ import { default as connectMongoDBSession } from 'connect-mongodb-session';
 import csurf from 'csurf';
 import Express, { json } from 'express';
 import ExpressSession from 'express-session';
+import { IUser } from './interfaces/user.interface';
+import isAuth from './middlewares/is-auth.middleware';
 import authRouter from './routes/auth.route';
 import bookRouter from './routes/book.route';
 import ENV_CONFIG from './utils/env.util';
@@ -12,6 +14,7 @@ import { ROUTE_PATH } from './utils/route-path.util';
 declare module "express-session" {
   interface SessionData {
     isLoggedIn: boolean;
+    user: IUser
   }
 }
 
@@ -37,11 +40,17 @@ app.use(ExpressSession({
   store: store
 }))
 
-// app.use(csrfProctection)
+if (ENV_CONFIG.NODE_ENV === 'production') {
+  app.use(csrfProctection)
 
-
+  app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+  });  
+}
 
 app.use(ROUTE_PATH.AUTH.DEFAULT, authRouter)
-app.use(ROUTE_PATH.BOOK.DEFAULT, bookRouter)
+app.use(ROUTE_PATH.BOOK.DEFAULT, isAuth, bookRouter)
 
 app.listen(SERVER_PORT)

@@ -46,6 +46,7 @@ export class AuthController {
         if (!isPasswordMatch) return res.status(401).send('Invalid email or password');
 
         req.session.isLoggedIn = true;
+        req.session.user = userFound;
         req.session.save();
         
         const userResToReturn: Omit<IUser, 'password'> =  {
@@ -59,7 +60,7 @@ export class AuthController {
         return res.status(200).send(userResToReturn);
     }
 
-    async getLogout(req: Request, res: Response) {
+    async postLogout(req: Request, res: Response) {
         req.session.destroy(err => {
             return (err) 
                 ? res.status(500).send(err) 
