@@ -1,22 +1,19 @@
-import { IUser } from "../interfaces/user.interface";
-import { UserModel } from "../models/user.model";
-
-type UserLogin = Pick<IUser, 'email' | 'password'>;
+import { type IUser } from '../interfaces/user.interface'
+import { UserModel } from '../models/user.model'
 
 export class AuthService {
-    saveUser(user: Omit<IUser, '_id'>){
-        const newUser = new UserModel({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            password: user.password
-        })
+  async saveUser (user: Omit<IUser, '_id'>) {
+    const newUser = new UserModel({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password
+    })
 
-        return newUser.save();
-    }
+    return await newUser.save()
+  }
 
-    getUserByEmail(email: string) {
-        return new UserModel({ email }).findUserByEmail();
-    }
-
+  async getUserByEmail (email: string) {
+    return await new UserModel({ email }).findUserByEmail()
+  }
 }
