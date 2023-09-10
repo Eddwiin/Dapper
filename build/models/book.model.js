@@ -20,5 +20,5 @@ const BookSchema = new mongoose_1.Schema({
         required: true
     }
 });
-const BookModel = (0, mongoose_1.model)('Book', BookSchema);
+const BookModel = mongoose_1.model('Book', BookSchema);
 exports.BookModel = BookModel;

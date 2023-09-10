@@ -12,28 +12,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.passwordValidator = exports.passwordRegexValidator = exports.lastNameValidator = exports.firstNameValidator = exports.emailValidator = exports.emailExistValidator = void 0;
 const express_validator_1 = require("express-validator");
 const user_model_1 = require("../models/user.model");
-const firstNameValidator = (0, express_validator_1.body)('firstName').notEmpty().withMessage('Must not be empty')
+const firstNameValidator = express_validator_1.body('firstName').notEmpty().withMessage('Must not be empty')
     .isString().withMessage('Must be a string').isLength({ min: 2, max: 30 })
     .withMessage('Must be between 2 and 30 letters');
 exports.firstNameValidator = firstNameValidator;
-const lastNameValidator = (0, express_validator_1.body)('lastName').notEmpty().withMessage('Must not be empty')
+const lastNameValidator = express_validator_1.body('lastName').notEmpty().withMessage('Must not be empty')
     .isString().withMessage('Must be a string').isLength({ min: 2, max: 30 })
     .withMessage('Must be between 2 and 30 letters');
 exports.lastNameValidator = lastNameValidator;
-const emailValidator = (0, express_validator_1.body)('email').isEmail().withMessage('Email invalid').normalizeEmail().trim();
+const emailValidator = express_validator_1.body('email').isEmail().withMessage('Email invalid').normalizeEmail().trim();
 exports.emailValidator = emailValidator;
-const emailExistValidator = (0, express_validator_1.body)('email')
+const emailExistValidator = express_validator_1.body('email')
     .custom((email) => __awaiter(void 0, void 0, void 0, function* () {
     const userFound = yield new user_model_1.UserModel({ email }).findUserByEmail();
-    return (userFound) ? Promise.reject('E-mail already in use') : null;
+    return (userFound !== null) ? yield Promise.reject(new Error('E-mail already in use')) : null;
 }));
 exports.emailExistValidator = emailExistValidator;
-const passwordRegexValidator = (0, express_validator_1.body)('password').isStrongPassword({
+const passwordRegexValidator = express_validator_1.body('password').isStrongPassword({
     minLength: 8,
     minLowercase: 1,
     minUppercase: 1,
-    minNumbers: 1,
+    minNumbers: 1
 });
 exports.passwordRegexValidator = passwordRegexValidator;
-const passwordValidator = (0, express_validator_1.body)('password').notEmpty().withMessage('Must not be empty').isString().withMessage('Must be a string').trim();
+const passwordValidator = express_validator_1.body('password').notEmpty().withMessage('Must not be empty').isString().withMessage('Must be a string').trim();
 exports.passwordValidator = passwordValidator;

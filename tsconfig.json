@@ -29,18 +29,5 @@
   
     /* Completeness */
     "skipLibCheck": true ,
-
-    "paths": {
-      "@dapper/configs/*": ["configs/*"],
-      "@dapper/controllers/*": ["controllers/*"],
-      "@dapper/interfaces/*": ["interfaces/*"],
-      "@dapper/middlewares/*": ["middlewares/*"],
-      "@dapper/models/*": ["models/*"],
-      "@dapper/routes/*": ["routes/*"],
-      "@dapper/services/*": ["services/*"],
-      "@dapper/utils/*": ["utils/*"],
-      "@dapper/validators/*": ["validators/*"]
-    }
-    
   }
 }

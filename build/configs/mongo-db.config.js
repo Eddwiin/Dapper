@@ -8,25 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = void 0;
-const user_model_1 = require("../models/user.model");
-class AuthService {
-    saveUser(user) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const newUser = new user_model_1.UserModel({
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                password: user.password
-            });
-            return yield newUser.save();
-        });
+exports.mongooseConnect = void 0;
+// import { default as connectMongoDBSession } from 'connect-mongodb-session';
+const mongoose_1 = __importDefault(require("mongoose"));
+const env_config_1 = __importDefault(require("./env.config"));
+const MONGO_URI = env_config_1.default.MONGO_URI;
+const mongooseConnect = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect(MONGO_URI);
+        console.log('MongoDB connected');
     }
-    getUserByEmail(email) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield new user_model_1.UserModel({ email }).findUserByEmail();
-        });
+    catch (err) {
+        console.error(`ERROR MONGODB: ${err}`);
     }
-}
-exports.AuthService = AuthService;
+});
+exports.mongooseConnect = mongooseConnect;
