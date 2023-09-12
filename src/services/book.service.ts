@@ -1,8 +1,8 @@
 import { type IBook } from '../interfaces/book.interface'
 import { BookModel } from '../models/book.model'
 export class BookService {
-  getAll () {
-    return BookModel.find()
+  async getAll () {
+    return await BookModel.find()
   }
 
   getById (id: string) {

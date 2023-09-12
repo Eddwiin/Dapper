@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser'
 import connectMongoDBSession from 'connect-mongodb-session'
 import csurf from 'csurf'
-import Express, { json } from 'express'
+import Express, { json, type NextFunction, type Request, type Response } from 'express'
 import ExpressSession from 'express-session'
-import 'module-alias/register'
+import { type Error } from 'mongoose'
 import ENV_CONFIG from './configs/env.config'
 import { mongooseConnect } from './configs/mongo-db.config'
 import { ROUTE_PATH } from './configs/route-path.config'
@@ -52,6 +52,12 @@ if (ENV_CONFIG.NODE_ENV === 'production') {
 
 app.use(ROUTE_PATH.AUTH.DEFAULT, authRouter)
 app.use(ROUTE_PATH.BOOK.DEFAULT, isAuth, bookRouter)
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  return res.status(Number(err.name)).json({
+    errors: err.message
+  })
+})
 
 void mongooseConnect().then(() => {
   app.listen(SERVER_PORT)

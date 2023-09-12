@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { Router, type Request, type Response } from 'express'
+import { Router, type NextFunction, type Request, type Response } from 'express'
 import { ROUTE_PATH } from '../configs/route-path.config'
 import { AuthController } from '../controllers/auth/auth.controller'
 import { emailExistValidator, emailValidator, firstNameValidator, lastNameValidator, passwordRegexValidator, passwordValidator } from '../validators/auth.validator'
@@ -17,7 +17,7 @@ authRouter.post(
     passwordRegexValidator
   ],
 
-  async (req: Request, res: Response) => await authController.postSignUp(req, res)
+  async (req: Request, res: Response, next: NextFunction) => await authController.postSignUp(req, res, next)
 )
 
 authRouter.post(
@@ -26,7 +26,7 @@ authRouter.post(
     emailValidator,
     passwordValidator
   ],
-  async (req: Request, res: Response) => await authController.postSignIn(req, res)
+  async (req: Request, res: Response, next: NextFunction) => await authController.postSignIn(req, res, next)
 )
 
 authRouter.post(ROUTE_PATH.AUTH.LOGOUT, async (req: Request, res: Response) => { await authController.postLogout(req, res) })
