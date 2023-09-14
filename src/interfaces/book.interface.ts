@@ -5,3 +5,5 @@ export interface IBook {
   description: string
   author: string
 }
+
+export type BookWithoutId = Omit<IBook, '_id'>

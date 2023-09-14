@@ -1,4 +1,4 @@
-import { type IBook } from '../interfaces/book.interface'
+import { type BookWithoutId, type IBook } from '../interfaces/book.interface'
 import { BookModel } from '../models/book.model'
 import { PaginationService } from './pagination.service'
 
@@ -34,7 +34,7 @@ export class BookService {
     )
   }
 
-  async save (book: Omit<IBook, 'id'>) {
+  async save (book: BookWithoutId) {
     const newBook = new BookModel({
       title: book.title,
       price: book.price,

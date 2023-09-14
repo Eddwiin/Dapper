@@ -1,8 +1,8 @@
-import { type IUser } from '../interfaces/user.interface'
+import { type UserWithoutId } from '../interfaces/user.interface'
 import { UserModel } from '../models/user.model'
 
 export class AuthService {
-  async saveUser (user: Omit<IUser, '_id'>) {
+  async saveUser (user: UserWithoutId) {
     const newUser = new UserModel({
       firstName: user.firstName,
       lastName: user.lastName,

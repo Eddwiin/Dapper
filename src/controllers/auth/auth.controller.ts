@@ -1,7 +1,7 @@
 import { compare as bcryptCompare, hash as bcryptHash } from 'bcrypt'
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
-import { type IUser } from '../../interfaces/user.interface'
+import { type IUser, type UserWithoutId, type UserWithoutPassword } from '../../interfaces/user.interface'
 import { AuthService } from '../../services/auth.service'
 import { HttpStatusCode, handleUnauthorized, handleValidationFieldError } from '../../utils/errors-response.util'
 
@@ -23,7 +23,7 @@ export class AuthController {
     const { firstName, lastName, email, password } = req.body as RequestBody
     const hashPassword = await bcryptHash(password, 12)
 
-    const userToAdd: Omit<IUser, '_id'> = {
+    const userToAdd: UserWithoutId = {
       firstName,
       lastName,
       email,
@@ -31,7 +31,16 @@ export class AuthController {
     }
 
     return await this.authService.saveUser(userToAdd)
-      .then(result => res.status(200).jsonp({ response: result }))
+      .then(result => {
+        const userToReturn: UserWithoutPassword = {
+          _id: result._id,
+          firstName: result.firstName,
+          lastName: result.lastName,
+          email: result.email
+        }
+
+        return res.status(200).json({ response: userToReturn })
+      })
       .catch((err: Error) => {
         err.name = HttpStatusCode.ServerError
         next(err)
@@ -72,7 +81,7 @@ export class AuthController {
     req.session.user = userFound
     req.session.save()
 
-    const userResToReturn: Omit<IUser, 'password'> = {
+    const userResToReturn: UserWithoutPassword = {
       _id: userFound._id,
       firstName: userFound.firstName,
       lastName: userFound.lastName,
@@ -85,7 +94,7 @@ export class AuthController {
   async postLogout (req: Request, res: Response) {
     req.session.destroy(err => {
       return (err)
-        ? res.status(500).send(err)
+        ? res.status(500).json({ errors: err })
         : res.send('Session is destroyed')
     })
   }
