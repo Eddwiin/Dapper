@@ -13,7 +13,9 @@ exports.BookService = void 0;
 const book_model_1 = require("../models/book.model");
 class BookService {
     getAll() {
-        return book_model_1.BookModel.find();
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield book_model_1.BookModel.find();
+        });
     }
     getById(id) {
         return book_model_1.BookModel.findById(id);

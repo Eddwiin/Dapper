@@ -7,10 +7,22 @@ type RequestParams = { id: string }
 
 export default class BookController {
   private readonly bookService = new BookService()
+  private readonly itemPerPage = 2
 
   async getAll (req: Request, res: Response, next: NextFunction) {
-    return await this.bookService.getAll()
-      .then((books) => res.status(200).json({ response: books }))
+    const page = req.query.page !== undefined ? Number(req.query.page) : 1
+
+    return await this.bookService.getAll(page, this.itemPerPage)
+      .then((result) => res.status(200).json(
+        {
+          response: result.books,
+          totalItem: result.totalItems,
+          hasNextPage: result.hasNextPage,
+          hasPreviousPage: result.hasPreviousPage,
+          nextPage: result.nextPage,
+          previousPage: result.previousPage,
+          lastPage: result.lastPage
+        }))
       .catch((err: Error) => { handleServerError(err, next) })
   }
 

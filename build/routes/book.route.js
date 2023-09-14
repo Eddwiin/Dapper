@@ -18,22 +18,22 @@ const route_path_config_1 = require("../configs/route-path.config");
 const book_controller_1 = __importDefault(require("../controllers/book.controller"));
 const is_auth_middleware_1 = __importDefault(require("../middlewares/is-auth.middleware"));
 const book_validator_1 = require("../validators/book.validator");
-const bookRouter = express_1.Router();
+const bookRouter = (0, express_1.Router)();
 const bookController = new book_controller_1.default();
-bookRouter.get(route_path_config_1.ROUTE_PATH.BOOK.ALL, (req, res) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.getAll(req, res); }));
-bookRouter.get(route_path_config_1.ROUTE_PATH.BOOK.GETBYID, (req, res) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.getBookById(req, res); }));
+bookRouter.get(route_path_config_1.ROUTE_PATH.BOOK.ALL, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.getAll(req, res, next); }));
+bookRouter.get(route_path_config_1.ROUTE_PATH.BOOK.GETBYID, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.getBookById(req, res, next); }));
 bookRouter.post(route_path_config_1.ROUTE_PATH.BOOK.SAVE, [
     book_validator_1.titleValidator,
     book_validator_1.priceValidator,
     book_validator_1.descriptionValidator,
     book_validator_1.authorValidator
-], (req, res) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.save(req, res); }));
+], (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.save(req, res, next); }));
 bookRouter.put(route_path_config_1.ROUTE_PATH.BOOK.UPDATE, is_auth_middleware_1.default, [
     book_validator_1.idValidator,
     book_validator_1.titleValidator,
     book_validator_1.priceValidator,
     book_validator_1.descriptionValidator,
     book_validator_1.authorValidator
-], (req, res) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.update(req, res); }));
-bookRouter.delete(route_path_config_1.ROUTE_PATH.BOOK.DELETE, (req, res) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.delete(req, res); }));
+], (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.update(req, res, next); }));
+bookRouter.delete(route_path_config_1.ROUTE_PATH.BOOK.DELETE, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { return yield bookController.delete(req, res, next); }));
 exports.default = bookRouter;

@@ -14,18 +14,23 @@ const bcrypt_1 = require("bcrypt");
 const express_validator_1 = require("express-validator");
 const auth_service_1 = require("../../services/auth.service");
 const errors_response_util_1 = require("../../utils/errors-response.util");
-// type RequestSession = typeof session.Session & Partial<session.SessionData> & { isLoggedIn: boolean };
 class AuthController {
     constructor() {
         this.authService = new auth_service_1.AuthService();
     }
-    postSignUp(req, res) {
+    postSignUp(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty())
-                return errors_response_util_1.returnErrorsStatus(res, errors);
+            const errors = (0, express_validator_1.validationResult)(req);
+            try {
+                if (!errors.isEmpty())
+                    throw new Error('Invalid fields');
+            }
+            catch (error) {
+                (0, errors_response_util_1.handleValidationFieldError)(error, errors.array(), next);
+                return;
+            }
             const { firstName, lastName, email, password } = req.body;
-            const hashPassword = yield bcrypt_1.hash(password, 12);
+            const hashPassword = yield (0, bcrypt_1.hash)(password, 12);
             const userToAdd = {
                 firstName,
                 lastName,
@@ -33,22 +38,44 @@ class AuthController {
                 password: hashPassword
             };
             return yield this.authService.saveUser(userToAdd)
-                .then(result => res.status(200).send(result))
-                .catch(err => res.status(500).send(err));
+                .then(result => res.status(200).jsonp({ response: result }))
+                .catch((err) => {
+                err.name = errors_response_util_1.HttpStatusCode.ServerError;
+                next(err);
+            });
         });
     }
-    postSignIn(req, res) {
+    postSignIn(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty())
-                return errors_response_util_1.returnErrorsStatus(res, errors);
+            const errors = (0, express_validator_1.validationResult)(req);
+            try {
+                if (!errors.isEmpty())
+                    throw new Error('Invalid fields');
+            }
+            catch (error) {
+                (0, errors_response_util_1.handleValidationFieldError)(error, errors.array(), next);
+                return;
+            }
             const { email, password: passwordFromBody } = req.body;
             const userFound = yield this.authService.getUserByEmail(email);
-            if (userFound === null)
-                return res.status(401).send('Invalid email or password');
-            const isPasswordMatch = yield bcrypt_1.compare(passwordFromBody, userFound.password);
-            if (!isPasswordMatch)
-                return res.status(401).send('Invalid email or password');
+            const throwinvalidEmailOrPasswordError = new Error('Invalid email or password');
+            try {
+                if (userFound === null)
+                    throw throwinvalidEmailOrPasswordError;
+            }
+            catch (error) {
+                (0, errors_response_util_1.handleUnauthorized)(error, next);
+                return;
+            }
+            const isPasswordMatch = yield (0, bcrypt_1.compare)(passwordFromBody, userFound.password);
+            try {
+                if (!isPasswordMatch)
+                    throw throwinvalidEmailOrPasswordError;
+            }
+            catch (error) {
+                (0, errors_response_util_1.handleUnauthorized)(error, next);
+                return;
+            }
             req.session.isLoggedIn = true;
             req.session.user = userFound;
             req.session.save();
@@ -58,7 +85,7 @@ class AuthController {
                 lastName: userFound.lastName,
                 email: userFound.email
             };
-            return res.status(200).send(userResToReturn);
+            return res.status(200).json({ response: userResToReturn });
         });
     }
     postLogout(req, res) {

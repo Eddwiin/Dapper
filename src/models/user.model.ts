@@ -27,8 +27,7 @@ const UserSchema = new Schema({
       return await mongoose.model('User').findOne({ email: this.email })
     }
   }
-}
-)
+})
 
 const UserModel = model('User', UserSchema)
 

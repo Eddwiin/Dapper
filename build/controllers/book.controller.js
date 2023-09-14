@@ -16,43 +16,59 @@ class BookController {
     constructor() {
         this.bookService = new book_service_1.BookService();
     }
-    getAll(req, res) {
+    getAll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.bookService.getAll()
-                .then((books) => res.status(200).send(books));
+                .then((books) => res.status(200).json({ response: books }))
+                .catch((err) => { (0, errors_response_util_1.handleServerError)(err, next); });
         });
     }
-    getBookById(req, res) {
+    getBookById(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            return yield this.bookService.getById(id).then((book) => res.status(200).send(book));
+            return yield this.bookService.getById(id)
+                .then((book) => res.status(200).json({ response: book }))
+                .catch((err) => { (0, errors_response_util_1.handleServerError)(err, next); });
         });
     }
-    update(req, res) {
+    update(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty())
-                return errors_response_util_1.returnErrorsStatus(res, errors);
+            const errors = (0, express_validator_1.validationResult)(req);
+            try {
+                if (!errors.isEmpty())
+                    throw new Error('Invalid fields');
+            }
+            catch (error) {
+                (0, errors_response_util_1.handleValidationFieldError)(error, errors.array(), next);
+                return;
+            }
             return yield this.bookService.update(req.body)
-                .then((result) => res.status(200).send(result))
-                .catch(err => { console.error(err); });
+                .then((result) => res.status(200).json({ response: result }))
+                .catch((err) => { (0, errors_response_util_1.handleServerError)(err, next); });
         });
     }
-    save(req, res) {
+    save(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty())
-                return errors_response_util_1.returnErrorsStatus(res, errors);
+            const errors = (0, express_validator_1.validationResult)(req);
+            try {
+                if (!errors.isEmpty())
+                    throw new Error('Invalid fields');
+            }
+            catch (error) {
+                (0, errors_response_util_1.handleValidationFieldError)(error, errors.array(), next);
+                return;
+            }
             return yield this.bookService.save(req.body)
-                .then((result) => res.status(200).send(result));
+                .then((result) => res.status(200).send(result))
+                .catch((err) => { (0, errors_response_util_1.handleServerError)(err, next); });
         });
     }
-    delete(req, res) {
+    delete(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             return yield this.bookService.delete(id)
                 .then((result) => res.status(200).send(result))
-                .catch(err => { console.log('ERREUR', err); });
+                .catch((err) => { (0, errors_response_util_1.handleServerError)(err, next); });
         });
     }
 }

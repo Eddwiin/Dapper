@@ -1,8 +1,16 @@
 import { type IBook } from '../interfaces/book.interface'
 import { BookModel } from '../models/book.model'
+import { PaginationService } from './pagination.service'
+
 export class BookService {
-  async getAll () {
-    return await BookModel.find()
+  async getAll (page: number, itemPerPage: number) {
+    return await BookModel.countDocuments().then(async (items) => {
+      const paginationService = new PaginationService(page, itemPerPage, items)
+      const paginationResults = paginationService.getPagination()
+      const books = await BookModel.find().skip(paginationResults.elementToSkip).limit(itemPerPage)
+
+      return { books, ...paginationResults }
+    })
   }
 
   getById (id: string) {
