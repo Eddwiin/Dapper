@@ -1,7 +1,9 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
+import { isValidObjectId } from 'mongoose'
 import { BookService } from '../services/book.service'
-import { handleServerError, handleValidationFieldError } from '../utils/errors-response.util'
+import { clearHash } from '../services/cache.service'
+import { handleBadRequest, handleNotFound, handleServerError, handleValidationFieldError } from '../utils/errors-response.util'
 
 type RequestParams = { id: string }
 
@@ -29,9 +31,19 @@ export default class BookController {
   async getBookById (req: Request, res: Response, next: NextFunction) {
     const { id } = req.params as RequestParams
 
-    return await this.bookService.getById(id)
-      .then((book) => res.status(200).json({ response: book }))
-      .catch((err: Error) => { handleServerError(err, next) })
+    try {
+      if (!isValidObjectId(id)) {
+        const error = new Error('Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer')
+        handleBadRequest(error, next); return
+      }
+
+      const book = await this.bookService.getById(id)
+      if (book === null) { handleNotFound(new Error('Book not found!'), next); return }
+
+      return res.status(200).json({ response: book })
+    } catch (error) {
+      handleServerError(error, next)
+    }
   }
 
   async update (req: Request, res: Response, next: NextFunction) {
@@ -59,8 +71,11 @@ export default class BookController {
       return
     }
 
-    return await this.bookService.save(req.body)
-      .then((result) => res.status(200).send(result))
+    await this.bookService.save(req.body)
+      .then(async (result) => {
+        res.status(200).send(result)
+        await clearHash(result.id)
+      })
       .catch((err: Error) => { handleServerError(err, next) })
   }
 

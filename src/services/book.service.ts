@@ -1,20 +1,24 @@
+import { ObjectId } from 'mongodb'
 import { type BookWithoutId, type IBook } from '../interfaces/book.interface'
 import { BookModel } from '../models/book.model'
 import { PaginationService } from './pagination.service'
 
 export class BookService {
   async getAll (page: number, itemPerPage: number) {
-    return await BookModel.countDocuments().then(async (items) => {
-      const paginationService = new PaginationService(page, itemPerPage, items)
-      const paginationResults = paginationService.getPagination()
-      const books = await BookModel.find().skip(paginationResults.elementToSkip).limit(itemPerPage)
+    const booksCount = await BookModel.countDocuments()
+    const paginationService = new PaginationService(page, itemPerPage, booksCount)
+    const paginationResults = paginationService.getPagination()
+    const books = await BookModel.find().skip(paginationResults.elementToSkip).limit(itemPerPage).cache()
+    const booksWithPagination = { books, ...paginationResults }
 
-      return { books, ...paginationResults }
-    })
+    return booksWithPagination
   }
 
-  getById (id: string) {
-    return BookModel.findById(id)
+  async getById (id: string) {
+    const convertIdToObjectId = new ObjectId(id)
+
+    return await BookModel.findById(convertIdToObjectId)
+      .cache({ key: id })
   }
 
   update (book: IBook) {

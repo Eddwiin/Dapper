@@ -1,18 +1,19 @@
 import bodyParser from 'body-parser'
+import connectMongoDBSession from 'connect-mongodb-session'
 import csurf from 'csurf'
 import Express, { json } from 'express'
+import ExpressSession from 'express-session'
 import ENV_CONFIG from './configs/env.config'
 import { mongooseConnect } from './configs/mongo-db.config'
 import { ROUTE_PATH } from './configs/route-path.config'
+import './libs/express-session.lib'
+import './libs/mongoose.lib'
 import csrfToken from './middlewares/csrf-token.middleware'
 import errorHandler from './middlewares/error-handler.middleware'
-// import expressSession from './middlewares/express-session.middleware'
-import connectMongoDBSession from 'connect-mongodb-session'
-import ExpressSession from 'express-session'
-import './libs/express-session.lib'
 import isAuth from './middlewares/is-auth.middleware'
 import authRouter from './routes/auth.route'
 import bookRouter from './routes/book.route'
+import './services/cache.service'
 
 const MongoDBStore = connectMongoDBSession(ExpressSession)
 const store = new MongoDBStore({

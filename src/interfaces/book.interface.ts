@@ -1,5 +1,7 @@
+import { type Types } from 'mongoose'
+
 export interface IBook {
-  _id: string
+  _id: Types.ObjectId
   title: string
   price: number
   description: string
