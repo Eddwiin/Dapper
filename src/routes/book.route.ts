@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router, type NextFunction, type Request, type Response } from 'express'
 import { ROUTE_PATH } from '../configs/route-path.config'
-import BookController from '../controllers/book.controller'
+import BookController from '../controllers/book/book.controller'
 import clearHashMiddleware from '../middlewares/clear-cache.middleware'
 import isAuth from '../middlewares/is-auth.middleware'
 import { authorValidator, descriptionValidator, idValidator, priceValidator, titleValidator } from '../validators/book.validator'
