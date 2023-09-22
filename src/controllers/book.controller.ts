@@ -1,9 +1,9 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
 import { isValidObjectId } from 'mongoose'
-import { BookService } from '../../services/book.service'
-import { clearHash } from '../../services/cache.service'
-import { handleBadRequest, handleNotFound, handleServerError, handleValidationFieldError } from '../../utils/errors-response.util'
+import { BookService } from '../services/book.service'
+import { clearHash } from '../services/cache.service'
+import { handleBadRequest, handleNotFound, handleServerError, handleValidationFieldError } from '../utils/errors-response.util'
 
 type RequestParams = { id: string }
 
@@ -57,7 +57,7 @@ export default class BookController {
     }
 
     return await this.bookService.update(req.body)
-      .then((result: any) => res.status(200).json({ response: result }))
+      .then((result: any) => res.status(200).json({ response: result }))
       .catch((err: Error) => { handleServerError(err, next) })
   }
 

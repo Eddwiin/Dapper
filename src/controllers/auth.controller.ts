@@ -1,9 +1,9 @@
 import { compare as bcryptCompare, hash as bcryptHash } from 'bcrypt'
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
-import { type IUser, type UserWithoutId, type UserWithoutPassword } from '../../interfaces/user.interface'
-import { AuthService } from '../../services/auth.service'
-import { HttpStatusCode, handleUnauthorized, handleValidationFieldError } from '../../utils/errors-response.util'
+import { type IUser, type UserWithoutId, type UserWithoutPassword } from '../interfaces/user.interface'
+import { AuthService } from '../services/auth.service'
+import { HttpStatusCode, handleUnauthorized, handleValidationFieldError } from '../utils/errors-response.util'
 
 type RequestBody = Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>
 
@@ -93,7 +93,7 @@ export class AuthController {
 
   async postLogout (req: Request, res: Response) {
     req.session.destroy(err => {
-      return (err)
+      return (err !== null)
         ? res.status(500).json({ errors: err })
         : res.send('Session is destroyed')
     })

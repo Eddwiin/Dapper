@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router, type NextFunction, type Request, type Response } from 'express'
 import { ROUTE_PATH } from '../configs/route-path.config'
-import { AuthController } from '../controllers/auth/auth.controller'
+import { AuthController } from '../controllers/auth.controller'
 import { emailExistValidator, emailValidator, firstNameValidator, lastNameValidator, passwordRegexValidator, passwordValidator } from '../validators/auth.validator'
 
 const authRouter = Router()

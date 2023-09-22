@@ -47,3 +47,5 @@ app.use(errorHandler)
 void mongooseConnect().then(() => {
   app.listen(SERVER_PORT)
 })
+
+export { app }
