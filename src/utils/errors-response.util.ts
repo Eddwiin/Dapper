@@ -16,7 +16,7 @@ export const handleServerError = (error: unknown, next: NextFunction) => {
 }
 
 export const handleValidationFieldError = (error: unknown, message: ValidationError[], next: NextFunction) => {
-  (error as Error).name = HttpStatusCode.UnprocessableEntity;
+  (error as Error).name = HttpStatusCode.BadRequest;
   (error as any).message = message
   next(error)
 }
